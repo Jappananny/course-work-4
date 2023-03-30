@@ -2,7 +2,8 @@ package DAO;
 
 import model.Role;
 import model.User;
-import org.hibernate.mapping.List;
+
+import java.util.List;
 
 public interface UserDao {
 
@@ -10,7 +11,11 @@ public interface UserDao {
 
     java.util.List<User> readAll();
 
+    User getUserWithRolesById(Long id);
+
     User getUserById(Long id);
+
+    List<User> getUsersByRole(Role role);
 
     void deleteUser(Long id);
 

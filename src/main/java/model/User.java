@@ -1,6 +1,5 @@
 package model;
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,7 +17,7 @@ public class User {
     @Column(name = "user_password")
     private String userPassword;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name="user_role",
             joinColumns=  @JoinColumn(name="user_id", referencedColumnName = "id"),
             inverseJoinColumns= @JoinColumn(name="role_id", referencedColumnName = "id") )
@@ -53,10 +52,14 @@ public class User {
     }
 
     public void addUserToRole(Role role) {
-        if (roles == null) {
-            roles = new ArrayList<>();
+        if (roles != null && !roles.contains(role)) {
+            roles.add(role);
+            role.getUsers().add(this);
         }
-        roles.add(role);
+    }
+    public void removeRole(Role role) {
+        this.roles.remove(role);
+        role.getUsers().remove(this);
     }
 
     public void setRoles(List<Role> roles) {
